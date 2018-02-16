@@ -18,6 +18,7 @@ Download the WebEx videos using NBR API
     <add key="Password" value="xxxxxx" />
     
 3. Create a new class named 'WebExXMLRequest.cs', this class will contain the XML requests for WebEx services
+    
     using System.Configuration;
     namespace WebExDownloadVideo
     {
@@ -96,6 +97,7 @@ Download the WebEx videos using NBR API
     }
     
 4. Now, create another class named 'WebExHelper.cs', this class will send the requests to WebEx XML/NBR services
+    
     using System;
     using System.Configuration;
     using System.IO;
@@ -253,6 +255,7 @@ Download the WebEx videos using NBR API
     }
     
     5. In your 'Program.cs' file, paste the code below
+        
         using System;
         using System.Collections.Generic;
         using System.IO;
