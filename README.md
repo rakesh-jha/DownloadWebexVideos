@@ -4,7 +4,7 @@ Download the WebEx videos using NBR API
 1. Create a console application using visual studio
 
 2. Add the below AppSetting in your App.config file, replace values as per your settings
-    
+    ```
     <add key="soapenv" value="http://schemas.xmlsoap.org/soap/envelope/" />
     <add key="xsd" value="http://www.w3.org/2001/XMLSchema" />
     <add key="xsi" value="http://ww.w3.org/2001/XMLSchema-instance" />
@@ -16,9 +16,10 @@ Download the WebEx videos using NBR API
     <add key="SiteName" value="xxxx" />
     <add key="UserName" value="xxxxxx" />
     <add key="Password" value="xxxxxx" />
+    ```
     
 3. Create a new class named 'WebExXMLRequest.cs', this class will contain the XML requests for WebEx services
-    
+    ```
     using System.Configuration;
     namespace WebExDownloadVideo
     {
@@ -95,9 +96,9 @@ Download the WebEx videos using NBR API
             }
         }
     }
-    
+    ```
 4. Now, create another class named 'WebExHelper.cs', this class will send the requests to WebEx XML/NBR services
-    
+    ```
     using System;
     using System.Configuration;
     using System.IO;
@@ -253,9 +254,9 @@ Download the WebEx videos using NBR API
             }
         }
     }
-    
+    ```
     5. In your 'Program.cs' file, paste the code below
-        
+        ```
         using System;
         using System.Collections.Generic;
         using System.IO;
@@ -346,7 +347,7 @@ Download the WebEx videos using NBR API
                 }
             }
         }
-        
+       ``` 
 6. Build and run the application.
 
 
