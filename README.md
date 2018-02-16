@@ -4,6 +4,7 @@ Download the WebEx videos using NBR API
 1. Create a console application using visual studio
 
 2. Add the below AppSetting in your App.config file, replace values as per your settings
+    
     <add key="soapenv" value="http://schemas.xmlsoap.org/soap/envelope/" />
     <add key="xsd" value="http://www.w3.org/2001/XMLSchema" />
     <add key="xsi" value="http://ww.w3.org/2001/XMLSchema-instance" />
