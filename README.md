@@ -255,99 +255,99 @@ Download the WebEx videos using NBR API
         }
     }
     ```
-    5. In your 'Program.cs' file, paste the code below
-        ```
-        using System;
-        using System.Collections.Generic;
-        using System.IO;
-        using System.Linq;
+5. In your 'Program.cs' file, paste the code below
+    ```
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
 
-        namespace WebExDownloadVideo
+    namespace WebExDownloadVideo
+    {
+        class Program
         {
-            class Program
+            static void Main(string[] args)
             {
-                static void Main(string[] args)
+                try
                 {
-                    try
+                    int totalDownloads = 1;
+                    //To keep the appointment ids where record id does not exist
+                    List<string> recordIdNotFound = new List<string>();
+                    WebExHelper obj = new WebExHelper();
+
+                    var meetingKeys = new List<string>() { "1234567", "8765444" }; //Make a request to your DB to fetch meeting key
+
+                    foreach (var item in meetingKeys)
                     {
-                        int totalDownloads = 1;
-                        //To keep the appointment ids where record id does not exist
-                        List<string> recordIdNotFound = new List<string>();
-                        WebExHelper obj = new WebExHelper();
-
-                        var meetingKeys = new List<string>() { "1234567", "8765444" }; //Make a request to your DB to fetch meeting key
-
-                        foreach (var item in meetingKeys)
+                        bool checkIfFileExist = File.Exists("d:\\WebEx_Videos\\" + item + ".arf");
+                        if (checkIfFileExist)
                         {
-                            bool checkIfFileExist = File.Exists("d:\\WebEx_Videos\\" + item + ".arf");
-                            if (checkIfFileExist)
+                            Console.WriteLine("File already exist for meeting key #" + item);
+                            totalDownloads++;
+                        }
+                        else
+                        {
+                            try
                             {
-                                Console.WriteLine("File already exist for meeting key #" + item);
-                                totalDownloads++;
-                            }
-                            else
-                            {
-                                try
+                                Console.WriteLine("=====================================================================");
+                                #region Get-RecordId
+                                Console.WriteLine("Fetching RecordId for meeting key #" + item + "..." + Environment.NewLine);
+                                var recordId = obj.GetRecordId(item);
+                                Console.WriteLine("Record ID: " + recordId + Environment.NewLine);
+                                #endregion
+
+                                if (!string.IsNullOrEmpty(recordId))
                                 {
-                                    Console.WriteLine("=====================================================================");
-                                    #region Get-RecordId
-                                    Console.WriteLine("Fetching RecordId for meeting key #" + item + "..." + Environment.NewLine);
-                                    var recordId = obj.GetRecordId(item);
-                                    Console.WriteLine("Record ID: " + recordId + Environment.NewLine);
+                                    #region Get-Access-Ticket
+                                    Console.WriteLine("Fetching ticket for accessing NBR storage server..." + Environment.NewLine);
+                                    var ticket = obj.GetStorageAccessTicket();
+                                    Console.WriteLine("Ticket : " + ticket + Environment.NewLine);
                                     #endregion
 
-                                    if (!string.IsNullOrEmpty(recordId))
+                                    if (!string.IsNullOrEmpty(ticket))
                                     {
-                                        #region Get-Access-Ticket
-                                        Console.WriteLine("Fetching ticket for accessing NBR storage server..." + Environment.NewLine);
-                                        var ticket = obj.GetStorageAccessTicket();
-                                        Console.WriteLine("Ticket : " + ticket + Environment.NewLine);
-                                        #endregion
-
-                                        if (!string.IsNullOrEmpty(ticket))
-                                        {
-                                            #region Download-Recording
-                                            Console.WriteLine("Downloading file for meeting key # : " + item + "..." + Environment.NewLine);
-                                            obj.DownloadNBRStorageFile(ticket, recordId, item);
-                                            Console.WriteLine("File downloaded successfully for meeting key #: " + item + Environment.NewLine);
-                                            Console.WriteLine("Total files downloaded : " + totalDownloads + Environment.NewLine);
-                                            totalDownloads++;
-                                            #endregion 
-                                        }
+                                        #region Download-Recording
+                                        Console.WriteLine("Downloading file for meeting key # : " + item + "..." + Environment.NewLine);
+                                        obj.DownloadNBRStorageFile(ticket, recordId, item);
+                                        Console.WriteLine("File downloaded successfully for meeting key #: " + item + Environment.NewLine);
+                                        Console.WriteLine("Total files downloaded : " + totalDownloads + Environment.NewLine);
+                                        totalDownloads++;
+                                        #endregion 
                                     }
-                                    else
-                                    {
-                                        recordIdNotFound.Add(item);
-                                    }
-                                    Console.WriteLine("=====================================================================");
                                 }
-                                catch (Exception ex)
+                                else
                                 {
-                                    Console.WriteLine("Error downloading the file for appointment id : " + item + Environment.NewLine + ex.Message);
+                                    recordIdNotFound.Add(item);
                                 }
+                                Console.WriteLine("=====================================================================");
                             }
-                        }
-
-                        if (recordIdNotFound != null && recordIdNotFound.Any())
-                        {
-                            Console.WriteLine("RecordId not found for below Appointments : " + Environment.NewLine);
-                            foreach (var item in recordIdNotFound)
+                            catch (Exception ex)
                             {
-                                Console.WriteLine(item);
+                                Console.WriteLine("Error downloading the file for appointment id : " + item + Environment.NewLine + ex.Message);
                             }
                         }
+                    }
 
-                        Console.Read();
-                    }
-                    catch (Exception ex)
+                    if (recordIdNotFound != null && recordIdNotFound.Any())
                     {
-                        Console.WriteLine(ex.Message);
-                        Console.ReadLine();
+                        Console.WriteLine("RecordId not found for below Appointments : " + Environment.NewLine);
+                        foreach (var item in recordIdNotFound)
+                        {
+                            Console.WriteLine(item);
+                        }
                     }
+
+                    Console.Read();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Console.ReadLine();
                 }
             }
         }
-       ``` 
+    }
+    ``` 
 6. Build and run the application.
 
 
